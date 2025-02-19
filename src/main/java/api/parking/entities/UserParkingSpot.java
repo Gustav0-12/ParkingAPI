@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "tb_user_parkingspot")
 public class UserParkingSpot {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String marca;
     private String cor;

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class ParkingSpot {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String code;
     @Enumerated(EnumType.STRING)

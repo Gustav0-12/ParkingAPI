@@ -11,11 +11,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-
 @Service
 public class TokenService {
 
-    @Value("${spring.api.spring.secret}")
+    @Value("${spring.api.security.secret")
     private String secret;
 
     public String generateToken(User user) {

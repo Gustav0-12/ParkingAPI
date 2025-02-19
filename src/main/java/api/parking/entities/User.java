@@ -18,15 +18,15 @@ import java.util.List;
 @Table(name = "tb_users")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     @Column(unique = true)
     private String email;
     private String password;
-    
     @Column(unique = true)
     private String cpf;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @Override
