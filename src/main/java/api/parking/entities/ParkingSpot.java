@@ -20,5 +20,6 @@ public class ParkingSpot {
     private String code;
     @Enumerated(EnumType.STRING)
     private Status status;
+    @Column(name = "creationtime")
     private LocalDateTime creationTime;
 }

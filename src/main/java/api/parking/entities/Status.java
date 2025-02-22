@@ -1,6 +1,16 @@
 package api.parking.entities;
 
 public enum Status {
-    AVAILABLE,
-    OCCUPIED;
+    AVAILABLE("available"),
+    OCCUPIED("occupied");
+
+    String status;
+
+    Status(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
 }
