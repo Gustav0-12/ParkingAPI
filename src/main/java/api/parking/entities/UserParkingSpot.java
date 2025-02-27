@@ -1,5 +1,6 @@
 package api.parking.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,7 +26,9 @@ public class UserParkingSpot {
     private String placa;
     private BigDecimal valor;
     private String recibo;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime dataEntrada;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime dataSaida;
     @ManyToOne
     @JoinColumn(name = "user_id")

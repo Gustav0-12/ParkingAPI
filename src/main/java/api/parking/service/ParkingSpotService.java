@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static api.parking.entities.Status.AVAILABLE;
+
 @Service
 public class ParkingSpotService {
 
@@ -35,5 +37,9 @@ public class ParkingSpotService {
 
     public ParkingSpot findByCode(String code) {
         return repository.findByCode(code).orElseThrow(() -> new RuntimeException("Vaga com o codigo " + code + " não encontrada"));
+    }
+
+    public ParkingSpot findFirstByStatus() {
+        return repository.findFirstByStatus(AVAILABLE).orElseThrow(() -> new RuntimeException("Vaga não encontrada"));
     }
 }

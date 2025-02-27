@@ -1,6 +1,5 @@
 package api.parking.service;
 
-import api.parking.dto.UserResponseDTO;
 import api.parking.entities.User;
 import api.parking.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,11 @@ public class UserService {
         return (User) repository.findByEmail(email);
     }
 
+    public User findByCpf(String cpf) {
+        return repository.findByCpf(cpf).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    }
+
     public void saveUser(User user) {
-        User savedUser = repository.save(user);
-        new UserResponseDTO(savedUser.getId(), savedUser.getName(), savedUser.getEmail(), savedUser.getPassword(), savedUser.getRole());
+         repository.save(user);
     }
 }

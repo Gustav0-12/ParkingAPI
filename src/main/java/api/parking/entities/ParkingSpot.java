@@ -1,5 +1,6 @@
 package api.parking.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,5 +22,6 @@ public class ParkingSpot {
     @Enumerated(EnumType.STRING)
     private Status status;
     @Column(name = "creationtime")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime creationTime;
 }
