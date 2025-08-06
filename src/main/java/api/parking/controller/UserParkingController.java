@@ -4,6 +4,7 @@ import api.parking.dto.UserParkingRequest;
 import api.parking.dto.UserParkingResponse;
 import api.parking.entities.UserParkingSpot;
 import api.parking.service.UserParkingService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/parking")
+@SecurityRequirement(name = "bearer-key")
 public class UserParkingController {
 
     @Autowired
