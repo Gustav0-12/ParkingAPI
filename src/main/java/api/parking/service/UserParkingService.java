@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;
 
@@ -28,21 +27,8 @@ public class UserParkingService {
     @Autowired
     UserService userService;
 
-    public BigDecimal calculateTotalValue(LocalDateTime dataEntrada, LocalDateTime dataSaida) {
-        long minutes = dataEntrada.until(dataSaida, ChronoUnit.MINUTES);
-        BigDecimal valorTotal;
-
-        if (minutes < 15) {
-            valorTotal = BigDecimal.valueOf(5.00);
-        } else if (minutes < 60) {
-            valorTotal = BigDecimal.valueOf(9.25);
-        } else {
-            double additionalHours = Math.ceil((minutes - 60 ) / 60);
-            double additionalFee = 2.00;
-            valorTotal = BigDecimal.valueOf(9.25).add(new BigDecimal(additionalFee * additionalHours));
-        }
-        return valorTotal;
-    }
+    @Autowired
+    ParkingFeeCalculator calculator;
 
     public String gerarRecibo() {
         Random gerador = new Random();
@@ -57,8 +43,14 @@ public class UserParkingService {
 
     public UserParkingSpot checkIn(UserParkingRequest data) {
         User user = userService.findByCpf(data.userCPF());
+        if (user == null) {
+            throw new RuntimeException("Usuario com o cpf " + data.userCPF()+ " não encontrado");
+        }
 
         ParkingSpot availableSpot = parkingSpotService.findFirstByStatus();
+        if (availableSpot == null) {
+            throw new RuntimeException("Nenhuma vaga disponivel no momento");
+        }
 
         UserParkingSpot parkingSpot = new UserParkingSpot();
         parkingSpot.setUser(user);
@@ -77,13 +69,15 @@ public class UserParkingService {
 
     public UserParkingSpot checkOut(String recibo) {
         UserParkingSpot parkingSpot = repository.findByReciboAndDataSaidaIsNull(recibo).orElseThrow(() -> new RuntimeException("Estacionamento não encontrado"));
+
         parkingSpot.getParkingSpot().setStatus(Status.AVAILABLE);
         parkingSpot.setDataSaida(LocalDateTime.now());
 
-        BigDecimal valor = calculateTotalValue(parkingSpot.getDataEntrada(), parkingSpot.getDataSaida());
+        BigDecimal valor = calculator.calculateTotalValue(parkingSpot.getDataEntrada(), parkingSpot.getDataSaida());
         parkingSpot.setValor(valor);
 
-        return repository.save(parkingSpot);
+        repository.save(parkingSpot);
+        return parkingSpot;
     }
 
     public UserParkingResponse findByRecibo(String recibo) {
